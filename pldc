@@ -23,3 +23,12 @@ echo 1 > /fhcfg/web_accout_enable
 # disable webs on boot
 a=$(cat /fh/extend/initialize.sh | grep ./runWeb.sh) b="./runWeb.sh"
 if [ "$a" = "$b" ]; then sed -i '/^[^#]/ s/\(^.*runWeb.*$\)/#\1/' /fh/extend/initialize.sh && sed -i '/^[^#]/ s/\(^.*httpclient.*$\)/#\1/' /fh/extend/initialize.sh && reboot; else echo "webs is already disabled"; fi
+
+# symlinks
+ln -s /opt/brokenmodem/lib/ld-musl-arm.so.1 /lib/ld-musl-arm.so.1
+
+# dropbear
+iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+/opt/brokenmodem/sbin/dropbear -s -g -r /opt/brokenmodem/etc/dropbear/hostkey -p 22
+
+
